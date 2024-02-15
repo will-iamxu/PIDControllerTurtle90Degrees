@@ -17,7 +17,7 @@ class Controller_Node(Node):
         self.move_distance = 2.0  
         self.current_distance = 0.0
         self.desired_theta_change = math.pi / 2  # 90 degrees turn for each corner
-        self.turn_threshold = 0.01  # Threshold for completing the turn
+        self.turn_threshold = 0.00000005  # Threshold for completing the turn
         self.move_threshold = 0.1   # Threshold for completing the straight movement
 
         self.initial_x = None
@@ -48,10 +48,10 @@ class Controller_Node(Node):
             angle_turned = self.normalize_angle(msg.theta - self.initial_theta)
             turning_error = self.desired_theta_change - abs(angle_turned)
             
-            self.get_logger().info(f"Angle turned: {math.degrees(angle_turned):.7f} degrees")
-            self.get_logger().info(f"Turning error: {math.degrees(turning_error):.7f} degrees")
+            self.get_logger().info(f"Angle turned: {(angle_turned):.7f} radians")
+            self.get_logger().info(f"Turning error: {(turning_error):.7f} radians")
 
-            if abs(angle_turned) >= self.desired_theta_change:
+            if abs(turning_error) <= self.turn_threshold:
                 self.is_turning = False
                 self.is_moving_forward = True
                 self.initial_x = msg.x  
