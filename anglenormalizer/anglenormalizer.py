@@ -46,6 +46,11 @@ class Controller_Node(Node):
                 self.command_velocity(1.0, 0.0)   
         elif self.is_turning:
             angle_turned = self.normalize_angle(msg.theta - self.initial_theta)
+            turning_error = self.desired_theta_change - abs(angle_turned)
+            
+            self.get_logger().info(f"Angle turned: {math.degrees(angle_turned):.2f} degrees")
+            self.get_logger().info(f"Turning error: {math.degrees(turning_error):.2f} degrees")
+
             if abs(angle_turned) >= self.desired_theta_change:
                 self.is_turning = False
                 self.is_moving_forward = True
@@ -53,7 +58,8 @@ class Controller_Node(Node):
                 self.initial_y = msg.y
                 self.command_velocity(0.0, 0.0)  
             else:
-                self.command_velocity(0.0, self.Kp_theta * (self.desired_theta_change - angle_turned))
+                self.command_velocity(0.0, self.Kp_theta * turning_error)
+
 
     def command_velocity(self, linear_v, angular_v):
         msg = Twist()
