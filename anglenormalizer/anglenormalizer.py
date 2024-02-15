@@ -48,8 +48,8 @@ class Controller_Node(Node):
             angle_turned = self.normalize_angle(msg.theta - self.initial_theta)
             turning_error = self.desired_theta_change - abs(angle_turned)
             
-            self.get_logger().info(f"Angle turned: {math.degrees(angle_turned):.2f} degrees")
-            self.get_logger().info(f"Turning error: {math.degrees(turning_error):.2f} degrees")
+            self.get_logger().info(f"Angle turned: {math.degrees(angle_turned):.7f} degrees")
+            self.get_logger().info(f"Turning error: {math.degrees(turning_error):.7f} degrees")
 
             if abs(angle_turned) >= self.desired_theta_change:
                 self.is_turning = False
